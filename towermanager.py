@@ -41,33 +41,33 @@ class TowerManager:
     
     def addNewTower(self, index, position):
         (x, y) = position
-        x *= 80
-        y *= 80
+        x *= self.size[0]
+        y *= self.size[1]
         position = (x, y)
-	if(index == 0):
-	    self.addTower(position)
-	elif(index == 1):
-	    self.addRechargeTower(position)
-	elif(index == 2):
-	    self.addLightningTower(position)
+        if(index == 0):
+            self.addTower(position)
+        elif(index == 1):
+            self.addRechargeTower(position)
+        elif(index == 2):
+            self.addLightningTower(position)
 
     def addTower(self, coordinates):
         self.towers.append(tower.Tower(coordinates[0], coordinates[1],
                                                  self.spritegroup, self.size))
     
     def addLightningTower(self, coordinates):
-	self.towers.append(lightningtower.LightningTower(coordinates[0],coordinates[1],
-						 self.spritegroup, self.size))
+        self.towers.append(lightningtower.LightningTower(coordinates[0],coordinates[1],
+            self.spritegroup, self.size))
 
     def addRechargeTower(self, coordinates):
-	self.towers.append(rechargetower.RechargeTower(coordinates[0],coordinates[1],
-						 self.spritegroup, self.size))
+        self.towers.append(rechargetower.RechargeTower(coordinates[0],coordinates[1],
+        self.spritegroup, self.size))
     def update(self, enemies):
         
         for t in self.towers:
-	    target = None
-	    if isinstance(t, rechargetower.RechargeTower):
-		target = t.fire(self.towers)
+            target = None
+            if isinstance(t, rechargetower.RechargeTower):
+                target = t.fire(self.towers)
             elif t.canFire():
                 target = t.fire(enemies)
             if target != None and target != [None]:

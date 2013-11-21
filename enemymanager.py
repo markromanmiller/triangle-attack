@@ -93,12 +93,15 @@ class EnemyManager:
             curr.update(pygame.time.get_ticks()-self.last_update_time, mapdata)
             if(curr.dead() or curr.offscreen(mapdata)):
                 EnemyManager.enemies.remove(curr)
-		killed += 1
+                killed += 1
                 curr.sprite.kill() # Remove the sprite from the sprite group
             if(curr.atDestination(mapdata)):
-                EnemyManager.enemies.remove(curr)
-                curr.sprite.kill()
-                retval += 1
+                try:
+                    EnemyManager.enemies.remove(curr)
+                    curr.sprite.kill()
+                    retval += 1
+                except ValueError as e:
+                    pass
         self.last_update_time = pygame.time.get_ticks()
         current_time = pygame.time.get_ticks()
         # Spawn enemies that need to be spawned

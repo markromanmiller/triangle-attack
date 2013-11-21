@@ -17,8 +17,8 @@ import selectionbar
 """
 The dimensions for the screen. These should remain constant.
 """
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 900
+SCREEN_WIDTH = 600
+SCREEN_HEIGHT = 700
 
 """
 The max number of frames per second for the game.
@@ -92,21 +92,21 @@ def handleEvent(event):
         pygame.quit()
         sys.exit()
     if(event.type == pygame.MOUSEBUTTONDOWN):
-	handleMouseEvent(event)
+        handleMouseEvent(event)
     else:
         EnemyManager.spawnEnemy(event, Map.getStartingTile())
 
 def handleMouseEvent(event):
     e = SelectionBar.handleMouseEvent(event)
     global selectedTower
-    if(e == -1 and event.pos[1] < 800 and selectedTower != None):
+    if(e == -1 and event.pos[1] < SCREEN_WIDTH and selectedTower != None):
         (mapX, mapY) = Map.getTileCoordinates(event.pos)
-	if(not(Map.tiles[mapX][mapY].isPlot()) or Data.resources < SelectionBar.prices[selectedTower]):
-	    return
-	Data.lose(SelectionBar.prices[selectedTower])
-	TowerManager.addNewTower(selectedTower, (mapX, mapY))
+        if(not(Map.tiles[mapX][mapY].isPlot()) or Data.resources < SelectionBar.prices[selectedTower]):
+            return
+        Data.lose(SelectionBar.prices[selectedTower])
+        TowerManager.addNewTower(selectedTower, (mapX, mapY))
     else:
-	selectedTower = e;
+        selectedTower = e
 
 """
 This is the main game loop, called as many times as
@@ -140,7 +140,7 @@ def update():
         # Update the enemies
         val = EnemyManager.update(Map)
         Data.lives -= val[0]
-	Data.earn(val[1])
+        Data.earn(val[1])
         # Update the Towers
         TowerManager.update(EnemyManager.enemies)
         # Update the UI
@@ -149,16 +149,16 @@ def update():
         if(Data.lives <= 0):
             GameState = False # The game is over
             UI.showDefeat()
-	if(EnemyManager.isFinished()):
-       	    UI.hasWon = True
-            UI.draw(ScreenSurface)
-            pygame.display.flip()
-            TowerManager.endLevel()
-            time.sleep(5)
-            UI.hasWon = False
-	    Data.mapNumber += 1
-	    EnemyManager.newLevel()
-	    makeMap(Data.mapNumber)
+    if(EnemyManager.isFinished()):
+        UI.hasWon = True
+        UI.draw(ScreenSurface)
+        pygame.display.flip()
+        TowerManager.endLevel()
+        time.sleep(5)
+        UI.hasWon = False
+        Data.mapNumber += 1
+        EnemyManager.newLevel()
+        makeMap(Data.mapNumber)
     
 
 """

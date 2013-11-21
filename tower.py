@@ -16,7 +16,7 @@ class Tower:
         self.size = size
         self.sprite.rect = pygame.Rect(x, y, size[0], size[1])
         group.add(self.sprite)
-	self.laserRange = 200
+	self.laserRange = 2*size[0]
 	self.damage = 100
 	self.charged = False
         self.sound = pygame.mixer.Sound(os.path.join("images", "tower_shoot.wav"))

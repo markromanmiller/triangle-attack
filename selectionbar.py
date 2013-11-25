@@ -25,7 +25,7 @@ class SelectionBar:
         for s in self.prices:
             self.priceSurface.append(self.font.render(str(s),True, SelectionBar.FONT_COLOR))
         for s in self.selections:
-            drawn = pygame.transform.scale(pygame.image.load(os.path.join("images", s + ".png")), size)
+            drawn = pygame.transform.scale(pygame.image.load(os.path.join("images", s + ".png")), size).convert_alpha()
             self.images.append(drawn)
         self.pad = -1
         for e in self.images:

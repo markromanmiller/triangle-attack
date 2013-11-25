@@ -4,21 +4,19 @@ import os
 import tower
 
 class LightningTower(tower.Tower):
-    DEFAULT_RECHARGE_TIME = 0 #this is a float in seconds
-
-    image = pygame.image.load(os.path.join("images", "lightning_tower.png"))
+    DEFAULT_RECHARGE_TIME = 0.05 #this is a float in seconds
     
-    def __init__(self, x, y, group, size):
+    def __init__(self, x, y, group, size, image):
         self.defaultRechargeTime = LightningTower.DEFAULT_RECHARGE_TIME
         self.timeOfLastFire = 0;
         self.sprite = pygame.sprite.Sprite()
-        self.sprite.image = pygame.transform.scale(LightningTower.image, size)
+        self.sprite.image = pygame.transform.scale(image, size)
         self.size = size
         self.sprite.rect = pygame.Rect(x, y, size[0], size[1])
         group.add(self.sprite)
-    	self.laserRange = 150
-	self.damage = .8
-	self.charged = False
+        self.laserRange = 150
+        self.damage = 1
+        self.charged = False
         self.channel = None
         self.sound = pygame.mixer.Sound(os.path.join("images", "lightning_tower_shoot.wav"))
 
@@ -30,7 +28,7 @@ class LightningTower(tower.Tower):
             (enemyX, enemyY) = enemy.sprite.rect.center
             currentDistance = (myX-enemyX)**2 + (myY-enemyY)**2
             if currentDistance < shortestDistance:
-		closestEnemy.append(enemy)
+                closestEnemy.append(enemy)
         for e in closestEnemy:
             e.takeDamage(self.damage)
             self.timeOfLastFire = time.time()

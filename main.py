@@ -40,28 +40,30 @@ This performs initial setup of the game. Any global variables
 should also be defined here (yes, I know most people say global
 variables are bad, but there really isn't a simple solution).
 """
-def setup():
-   
+def firstSetup():
     # Set the title of the game.
     pygame.display.set_caption(TITLE)
     # Set up a new window.
     global ScreenSurface
     ScreenSurface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    global UI
+    UI = userinterface.UserInterface()
+
+def setup():
+   
     # Set up the map
     global Map
     # Set up the starting game data
     global Data
     Data = gamedata.GameData()
     # Set up the UI
-    global UI
-    UI = userinterface.UserInterface()
     Map = gamemap.GameMap("map1", ScreenSurface)
     # Initialize the enemy manager
     global EnemyManager
     EnemyManager = enemymanager.EnemyManager(Map.getTileSize(), 15)
     # initialize the tower manager
     global TowerManager
-    TowerManager = towermanager.TowerManager(Map.getTileSize())
+    TowerManager = towermanager.TowerManager(Map.getTileSize(), ScreenSurface)
     # start mixer, load song
     global SoundManager
     SoundManager = soundmanager.SoundManager()
@@ -102,6 +104,8 @@ def handleMouseEvent(event):
     if(e == -1 and event.pos[1] < SCREEN_WIDTH and selectedTower != None):
         (mapX, mapY) = Map.getTileCoordinates(event.pos)
         if(not(Map.tiles[mapX][mapY].isPlot()) or Data.resources < SelectionBar.prices[selectedTower]):
+            return
+        if (mapX, mapY) in TowerManager.towerPositions:
             return
         Data.lose(SelectionBar.prices[selectedTower])
         TowerManager.addNewTower(selectedTower, (mapX, mapY))
@@ -194,5 +198,6 @@ def handleKeyEvent(event):
             return # TODO: Add stuff for key up events here
 
 pygame.init()
+firstSetup()
 setup()
 main()

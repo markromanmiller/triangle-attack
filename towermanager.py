@@ -2,13 +2,23 @@ import tower
 import lightningtower
 import pygame
 import rechargetower
+from os.path import join
+from time import time
 
 class TowerManager:
-    def __init__(self, size):
+
+    LASER_DURATION = .3 #seconds
+
+    def __init__(self, size, surface):
         self.size = size
         self.towers = []
+        self.towerPositions = []
         self.spritegroup = pygame.sprite.Group()
         self.attacks = [] # set for attacks: list [tower, enemy, time]
+        self.surface = surface
+        self.towerSprite = pygame.image.load(join("images", "tower.png")).convert_alpha()
+        self.lightningSprite = pygame.image.load(join("images", "lightning_tower.png")).convert_alpha()
+        self.rechargeSprite = pygame.image.load(join("images", "recharge_tower.png")).convert_alpha()
 
     def drawSprites(self, surface):
         self.spritegroup.draw(surface)
@@ -34,13 +44,13 @@ class TowerManager:
             pygame.draw.circle(surface, colors[1], (eX, eY), lR)
             pygame.draw.line(surface, colors[1], (tX, tY), (eX, eY), lR)
             
-            attack[2] -= 1
         for attack in self.attacks:
-            if attack[2] < 0:
+            if attack[2] < time():
                 self.attacks.remove(attack)
     
     def addNewTower(self, index, position):
         (x, y) = position
+        self.towerPositions.append(position)
         x *= self.size[0]
         y *= self.size[1]
         position = (x, y)
@@ -53,15 +63,15 @@ class TowerManager:
 
     def addTower(self, coordinates):
         self.towers.append(tower.Tower(coordinates[0], coordinates[1],
-                                                 self.spritegroup, self.size))
+                                                 self.spritegroup, self.size, self.towerSprite))
     
     def addLightningTower(self, coordinates):
         self.towers.append(lightningtower.LightningTower(coordinates[0],coordinates[1],
-            self.spritegroup, self.size))
+            self.spritegroup, self.size, self.lightningSprite))
 
     def addRechargeTower(self, coordinates):
         self.towers.append(rechargetower.RechargeTower(coordinates[0],coordinates[1],
-        self.spritegroup, self.size))
+        self.spritegroup, self.size, self.rechargeSprite))
     def update(self, enemies):
         
         for t in self.towers:
@@ -72,7 +82,7 @@ class TowerManager:
                 target = t.fire(enemies)
             if target != None and target != [None]:
                 for enemy in target:
-                    self.attacks.append([t, enemy, 20])
+                    self.attacks.append([t, enemy, time() + TowerManager.LASER_DURATION])
     
     def endLevel(self):
         for i in range(len(self.towers)):
@@ -80,4 +90,5 @@ class TowerManager:
             del self.towers[0]
         self.towers = []
         self.attacks = []
+        self.towerPositions = []
            

@@ -51,7 +51,7 @@ class Tile:
             else: # Buildable tile by default
                 name = "plot.png"
             # The os.path.join() function is used for cross platform compatibility
-            self.sprite.image = pygame.image.load(os.path.join("images", name))
+            self.sprite.image = pygame.image.load(os.path.join("images", name)).convert()
             self.sprite.image = pygame.transform.scale(self.sprite.image, size)
             # Set the position of the sprite using a rectangle
             width = self.sprite.image.get_width()

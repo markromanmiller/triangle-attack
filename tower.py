@@ -5,14 +5,12 @@ import os
 class Tower:
 
     DEFAULT_RECHARGE_TIME = 1.0 #this is a float in seconds
-
-    image = pygame.image.load(os.path.join("images", "tower.png"))
     
-    def __init__(self, x, y, group, size):
+    def __init__(self, x, y, group, size, image):
         self.defaultRechargeTime = Tower.DEFAULT_RECHARGE_TIME
         self.timeOfLastFire = 0;
         self.sprite = pygame.sprite.Sprite()
-        self.sprite.image = pygame.transform.scale(Tower.image, size)
+        self.sprite.image = pygame.transform.scale(image, size)
         self.size = size
         self.sprite.rect = pygame.Rect(x, y, size[0], size[1])
         group.add(self.sprite)

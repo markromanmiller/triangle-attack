@@ -39,13 +39,13 @@ class Enemy:
     """
     def __init__(self, x, y, group, size, wave):
         if(not Enemy.initialized): # Load the images
-            Enemy.up_image = pygame.image.load(os.path.join("images", "enemy_up.png"))
+            Enemy.up_image = pygame.image.load(os.path.join("images", "enemy_up.png")).convert_alpha()
             Enemy.up_image = pygame.transform.scale(Enemy.up_image, size)
-            Enemy.down_image = pygame.image.load(os.path.join("images", "enemy_down.png"))
+            Enemy.down_image = pygame.image.load(os.path.join("images", "enemy_down.png")).convert_alpha()
             Enemy.down_image = pygame.transform.scale(Enemy.down_image, size)
-            Enemy.left_image = pygame.image.load(os.path.join("images", "enemy_left.png"))
+            Enemy.left_image = pygame.image.load(os.path.join("images", "enemy_left.png")).convert_alpha()
             Enemy.left_image = pygame.transform.scale(Enemy.left_image, size)
-            Enemy.right_image = pygame.image.load(os.path.join("images", "enemy_right.png"))
+            Enemy.right_image = pygame.image.load(os.path.join("images", "enemy_right.png")).convert_alpha()
             Enemy.right_image = pygame.transform.scale(Enemy.right_image, size)
             Enemy.initialized = True
         self.health = DEFAULT_HEALTH + wave*10

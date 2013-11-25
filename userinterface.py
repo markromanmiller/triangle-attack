@@ -40,7 +40,7 @@ class UserInterface:
         pygame.font.init()
         self.font = pygame.font.Font(os.path.join("UI", "larabie.ttf"), FONT_SIZE, )
         self.gamestate = True # The game is running
-	self.hasWon = False;
+        self.hasWon = False;
 
     def update(self, gamedata):
         # We save a surface containing the text we want to show.
@@ -52,10 +52,10 @@ class UserInterface:
                                           True, FONT_COLOR)
         self.defeat = self.font.render("You have been defeated!", True,
                                        FONT_COLOR)
-	self.currentLevel = self.font.render("Level: " + str(gamedata.mapNumber),
-				       True, FONT_COLOR)
-	self.nextLevel = self.font.render("Great Job! Moving on to next level...", True,
-				       FONT_COLOR)
+        self.currentLevel = self.font.render("Level: " + str(gamedata.mapNumber),
+                                                           True, FONT_COLOR)
+        self.nextLevel = self.font.render("Great Job! Moving on to next level...", True,
+                                                           FONT_COLOR)
 
     def draw(self, surface):
         # Draw the score in the upper left corner
@@ -65,11 +65,11 @@ class UserInterface:
         # Put the resources in the top right corner
         surface.blit(self.resources, (surface.get_width()-FONT_PADDING-self.resources.get_width(),
                                       FONT_PADDING))
-	surface.blit(self.currentLevel, (surface.get_width()- FONT_PADDING-self.currentLevel.get_width(),
+        surface.blit(self.currentLevel, (surface.get_width()- FONT_PADDING-self.currentLevel.get_width(),
                                       FONT_SIZE + FONT_PADDING + FONT_LINESPACE))
 
-	if(self.hasWon):
-	    surface.blit(self.nextLevel, ((surface.get_width()-self.nextLevel.get_width())/2,
+        if(self.hasWon):
+            surface.blit(self.nextLevel, ((surface.get_width()-self.nextLevel.get_width())/2,
                                        (surface.get_height()-self.nextLevel.get_height())/2))
         # If the game has ended, show a defeat message
         if(not self.gamestate):
@@ -80,7 +80,7 @@ class UserInterface:
         self.gamestate = False # The game is 
 
     def showWin(self):
-	self.hasWon = True #Has won the current level
+        self.hasWon = True #Has won the current level
         
 # A little trick so we can run the game from here in IDLE
 if __name__ == '__main__':

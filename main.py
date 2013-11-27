@@ -41,6 +41,8 @@ should also be defined here (yes, I know most people say global
 variables are bad, but there really isn't a simple solution).
 """
 def firstSetup():
+    global firstScreen 
+    firstScreen = True
     # Set the title of the game.
     pygame.display.set_caption(TITLE)
     # Set up a new window.
@@ -48,6 +50,12 @@ def firstSetup():
     ScreenSurface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     global UI
     UI = userinterface.UserInterface()
+    global image
+    image = pygame.image.load(os.path.join("game_assets", "title.png")).convert()
+    global GameClock
+    GameClock = pygame.time.Clock()
+    global GameState
+    GameState = True
 
 def setup():
    
@@ -67,10 +75,6 @@ def setup():
     # start mixer, load song
     global SoundManager
     SoundManager = soundmanager.SoundManager()
-    global GameClock
-    GameClock = pygame.time.Clock()
-    global GameState
-    GameState = True
     global SelectionBar
     SelectionBar = selectionbar.SelectionBar(Map.getTileSize())
     global selectedTower
@@ -93,12 +97,18 @@ def handleEvent(event):
         # Quit the program safely
         pygame.quit()
         sys.exit()
+    global firstScreen
     if(event.type == pygame.MOUSEBUTTONDOWN):
         handleMouseEvent(event)
-    else:
+    elif not(firstScreen):
         EnemyManager.spawnEnemy(event, Map.getStartingTile())
 
 def handleMouseEvent(event):
+    global firstScreen
+    if firstScreen:
+        setup()
+        firstScreen = False
+        return
     e = SelectionBar.handleMouseEvent(event)
     global selectedTower
     if(e == -1 and event.pos[1] < SCREEN_WIDTH and selectedTower != None):
@@ -139,6 +149,9 @@ Handles any updating of game objects. This is called
 once per game loop.
 """
 def update():
+    global firstScreen
+    if firstScreen:
+        return
     global GameState
     if(GameState):
         # Update the enemies
@@ -170,6 +183,10 @@ Draws all game objects to the screen. This is called once
 per game loop.
 """
 def draw():
+    if firstScreen:
+        global image
+        ScreenSurface.blit(image, (0, 0))
+        return
     # Draw the map
     Map.draw(ScreenSurface)
     # Draw the enemies
@@ -199,5 +216,4 @@ def handleKeyEvent(event):
 
 pygame.init()
 firstSetup()
-setup()
 main()
